@@ -122,6 +122,7 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
         cout << "---- <Enter a number dumbo> ----" << endl;
         continue;
       }
+      
       validInput = true;
       Activity::Activity_Code activityCode =
           static_cast<Activity::Activity_Code>(iActivityInput);
