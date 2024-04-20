@@ -19,6 +19,10 @@ private:
 
 public:
   Participant() : maxIndex(-1), height(0), milesWalked(0) {}
+  Participant(float h, const char* fName, const char* lName) : height(h), maxIndex(-1), milesWalked(0) {
+    strncpy(firstName, fName, sizeof(firstName));
+    strncpy(lastName, lName, sizeof(lastName));
+  }
   string getKey() const;
   void setFirstName(const char *fname) { strcpy(firstName, fname); }
   void setLastName(const char *lname) { strcpy(lastName, lname); }
@@ -38,12 +42,7 @@ public:
       return Activity();
   }
   double getMilesWalked() const {
-    int i;
-    double miles;
-    for (i = 0; i < maxIndex; i++) {
-      miles += participantActivities[i].getInMiles(height);
-    }
-    return miles;
+    return milesWalked;
   }
   void printStats() const {
     cout << "Participant " << firstName << " " << lastName << ", " << milesWalked << " total miles walked";
