@@ -3,6 +3,7 @@
 #include "node.h"
 #include "participant.h"
 #include "position.h"
+#include "userFunctions.h"
 
 #include <fstream>
 #include <iostream>
@@ -61,10 +62,7 @@ void convertTextToBinary(const std::string &inputFileName,
   inputFile.close();
   outputFile.close();
 }
-void Remove_Participant(BinarySearchTree<Participant> &tree) {
-  Position<Participant> thing = tree.findParticipant("arnoldcindy");
-  cout << thing.getItem();
-}
+
 int main() {
   ifstream inFile("input.bin", ios::binary);
   BinarySearchTree<Participant> tree;
@@ -91,9 +89,10 @@ int main() {
 
     switch (iInput) {
     case 1:
-      Remove_Participant(tree);
+      removeParticipant(tree);
       break;
     case 2:
+      addParticipant(tree);
       break;
     case 3:
       break;

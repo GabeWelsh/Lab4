@@ -45,6 +45,9 @@ public:
     }
     return miles;
   }
+  void printStats() const {
+    cout << "Participant " << firstName << " " << lastName << ", " << milesWalked << " total miles walked";
+  }
 
   void writeToBinaryFile(ofstream &outFile) const {
     outFile.write(firstName, sizeof(firstName));

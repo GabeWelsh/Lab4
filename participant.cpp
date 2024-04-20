@@ -3,8 +3,8 @@
 
 using namespace std;
 string Participant::getKey() const {
-    std::string key = firstName;
-    key += lastName;
+    std::string key = lastName;
+    key += firstName;
     transform(key.begin(), key.end(), key.begin(), ::tolower);
     return key;
 }
