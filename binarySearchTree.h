@@ -50,6 +50,7 @@ public:
   Node<T> *copyTree(Node<T> *, Node<T> *);
   void readFromBinaryFile(ifstream &inFile);
   void addActivityToPosition(Position<Participant> &p, Activity &a);
+  double getTotalMilesFromActivities() const;
   void writeToBinaryFile(ofstream &outFile) const;
 
 private:
@@ -78,6 +79,17 @@ private:
   // remove node above fake leaf node at position p
   Position<T> removeAboveExternal(const Position<T> &p);
 };
+
+template<>
+inline double BinarySearchTree<Participant>::getTotalMilesFromActivities() const {
+  Position<Participant> pos = begin();
+  double totalMiles = 0;
+  do {
+    totalMiles += pos.getItem().getMilesWalked();
+    ++pos;
+  } while (pos != end());
+  return totalMiles;
+}
 
 template<>
 inline void BinarySearchTree<Participant>::addActivityToPosition(Position<Participant> &p, Activity &a) {

@@ -33,6 +33,7 @@ public:
   void addActivity(const Activity::Activity_Code code, const double minutes) {
     Activity temp(minutes, code);
     participantActivities[maxIndex + 1] = temp;
+    calculateTotalMilesWalked();
     maxIndex++;
   }
   Activity getActivity(const int index) const {

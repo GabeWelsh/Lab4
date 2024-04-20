@@ -98,6 +98,7 @@ int main() {
       addActivity(tree);
       break;
     case 4:
+      printTotalMilesWalked(tree);
       break;
     case 5:
       tree.traverseAndPrint(tree.root(), PREORDER);

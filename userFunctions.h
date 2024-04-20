@@ -49,6 +49,7 @@ inline string fixString(const std::string &input) {
   }
   return result;
 }
+
 inline void addParticipant(BinarySearchTree<Participant> &tree) {
   string firstName, lastName;
   cout << "Last Name: ";
@@ -122,7 +123,6 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
         cout << "---- <Enter a number dumbo> ----" << endl;
         continue;
       }
-      
       validInput = true;
       Activity::Activity_Code activityCode =
           static_cast<Activity::Activity_Code>(iActivityInput);
@@ -137,5 +137,10 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
          << endl;
   }
 }
+
+inline void printTotalMilesWalked(BinarySearchTree<Participant> &tree) {
+  cout << tree.getTotalMilesFromActivities() << endl;
+}
+
 
 #endif
