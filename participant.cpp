@@ -1,9 +1,10 @@
 #include "participant.h"
-#include <cstring>
+#include <bits/stdc++.h>
 
-char* Participant::getKey() const {
-    char *key = new char[strlen(firstName) + strlen(lastName) + 1];
-    strcpy(key, firstName);
-    strcat(key, lastName);
+using namespace std;
+string Participant::getKey() const {
+    std::string key = firstName;
+    key += lastName;
+    transform(key.begin(), key.end(), key.begin(), ::tolower);
     return key;
 }

@@ -19,7 +19,7 @@ private:
 
 public:
   Participant() : maxIndex(-1), height(0), milesWalked(0) {}
-  char *getKey() const;
+  string getKey() const;
   void setFirstName(const char *fname) { strcpy(firstName, fname); }
   void setLastName(const char *lname) { strcpy(lastName, lname); }
   void setHeight(const float h) { height = h; }

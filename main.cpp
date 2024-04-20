@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// was used to create binary file from supplied text file
 void convertTextToBinary(const std::string &inputFileName,
                          const std::string &outputFileName) {
   std::ifstream inputFile(inputFileName); // Open text file for reading
@@ -27,28 +28,20 @@ void convertTextToBinary(const std::string &inputFileName,
   }
 
   std::string line;
-  while (std::getline(inputFile, line)) { // Read each line from the text file
+  while (std::getline(inputFile, line)) { // for each line
+    // get name, height, and number of activities
     std::istringstream firstLineISS(line);
     std::string firstName, lastName;
     float height;
     int numActivities;
-    firstLineISS >> firstName >> lastName >> height >>
-        numActivities; // Read participant information
-
-    // clean up `firstName` and `lastName` (get rid of any random '\0'
-    //    characters)
-    firstName.erase(std::remove(firstName.begin(), firstName.end(), '\0'),
-                    firstName.end());
-
-    // Clean up lastName string by removing null characters
-    lastName.erase(std::remove(lastName.begin(), lastName.end(), '\0'),
-                   lastName.end());
+    firstLineISS >> firstName >> lastName >> height >> numActivities;
 
     Participant participant;
     participant.setFirstName(firstName.c_str());
     participant.setLastName(lastName.c_str());
     participant.setHeight(height);
 
+    // read each activity
     for (int i = 0; i < numActivities; ++i) {
       int activityCode, minutes;
       // go to next line
@@ -68,8 +61,52 @@ void convertTextToBinary(const std::string &inputFileName,
   inputFile.close();
   outputFile.close();
 }
-
+void Remove_Participant(BinarySearchTree<Participant> &tree) {
+  Position<Participant> thing = tree.findParticipant("arnoldcindy");
+  cout << thing.getItem();
+}
 int main() {
-  convertTextToBinary("input", "input.bin");
+  ifstream inFile("input.bin", ios::binary);
+  BinarySearchTree<Participant> tree;
+  tree.readFromBinaryFile(inFile);
+
+  string sInput;
+  do {
+    cout << "----- Choose an option below -----\n";
+    cout << "  1: Remove participant\n"
+         << "  2: Add participant\n"
+         << "  3: Add activity\n"
+         << "  4: Calculate total miles walked\n"
+         << "  5: Pre-order print\n"
+         << "  6: Exit and save\n";
+    cout << "Option> ";
+    cin >> sInput;
+    int iInput;
+    try {
+      iInput = stoi(sInput);
+    } catch (...) {
+      cout << "----- <Enter a number dumbo> -----\n";
+      continue;
+    }
+
+    switch (iInput) {
+    case 1:
+      Remove_Participant(tree);
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      tree.traverseAndPrint(tree.root(), PREORDER);
+      break;
+    case 6:
+      break;
+    }
+  } while (sInput != "6");
+
+  inFile.close();
   return 0;
 }

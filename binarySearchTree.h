@@ -38,6 +38,7 @@ public:
   // returns NULL iterator
   Position<T> end() const { return Position<T>(); }
   Position<T> find(const T &) const;
+  Position<T> findParticipant(const string &) const;
   Position<T> insert(const T &);
   bool erase(const T &);
   bool erase(const Position<T> &);
@@ -62,6 +63,7 @@ private:
   // finds item in tree starting at position
   Position<T> findUtility(const T &item,
                           const Position<T> &) const; // askudhgaoskeghs
+  Position<T> findParticipantUtility(const string &key, const Position<T> &) const;
   // inserts item into tree
   Position<T> insertUtility(const T &item);
   // deletes all nodes in the tree
@@ -309,6 +311,20 @@ template <class T> Position<T> BinarySearchTree<T>::find(const T &item) const {
     return Position<T>(superRootPtr);
 }
 
+/* finds a T object in tree
+ * Parameters: the object to find
+ * Pre-condition: class T has overloaded operator==
+ * Returns iterator to object, superroot iterator if tree
+ * is empty, fake leaf postion if not found
+ */
+template <class T> Position<T> BinarySearchTree<T>::findParticipant(const string &key) const {
+  if (numNodes > 0) {
+    Position<T> v = findParticipantUtility(key, root());
+    return v;
+  } else
+    return Position<T>(superRootPtr);
+}
+
 /* inserts object T in the binary tree
  * Parameter: the object to insert
  * Pre-condition: class T has overloaded operator<
@@ -351,6 +367,27 @@ Position<T> BinarySearchTree<T>::findUtility(const T &item,
     return findUtility(item, pos.left());
   } else {
     return findUtility(item, pos.right());
+  }
+}
+
+// findUtility: recursive utility find function
+// Parameters:
+// item to look for
+// p position to start looking from
+// Pre-condition: class T has overloaded operator== and
+// operator<, tree not empty of real nodes
+// Returns position iterator where found or NULL iterator
+template <class T>
+Position<T> BinarySearchTree<T>::findParticipantUtility(const string &key,
+                                             const Position<T> &pos) const {
+  if (pos.isExternal()) {
+    return pos;
+  } else if (pos.nodePtr->item.getKey() == key.c_str()) { // found
+    return pos;
+  } else if (pos.nodePtr->item.getKey() > key.c_str()) { // left
+    return findParticipantUtility(key, pos.left());
+  } else {
+    return findParticipantUtility(key, pos.right()); // right
   }
 }
 
