@@ -49,7 +49,6 @@ inline string fixString(const std::string &input) {
   }
   return result;
 }
-
 inline void addParticipant(BinarySearchTree<Participant> &tree) {
   string firstName, lastName;
   cout << "Last Name: ";
@@ -76,6 +75,68 @@ inline void addParticipant(BinarySearchTree<Participant> &tree) {
   } else {
     cout << thing.getItem().getFirstName() << " "
          << thing.getItem().getLastName() << " is already a participant";
+  }
+}
+
+inline void addActivity(BinarySearchTree<Participant> &tree) {
+  string firstName, lastName;
+  cout << "Last Name: ";
+  cin >> lastName;
+  cout << "First Name: ";
+  cin >> firstName;
+
+  string key = lastName;
+  key += firstName;
+  transform(key.begin(), key.end(), key.begin(), ::tolower);
+
+  firstName = fixString(firstName);
+  lastName = fixString(lastName);
+
+  Position<Participant> guy = tree.findParticipant(key);
+  if (guy.isExternal()) {
+    cout << "Participant not found." << endl;
+  } else {
+    bool validInput = false;
+    string sActivityInput, sMinutes;
+    int iActivityInput;
+    double dMinutes;
+    do {
+      cout << "Activity code: ";
+      cin >> sActivityInput;
+      try {
+        iActivityInput = stoi(sActivityInput);
+      } catch (...) {
+        cout << "---- <Enter a number dumbo> ----" << endl;
+        continue;
+      }
+      if (iActivityInput > Activity::Activity_Code::Yoga ||
+          iActivityInput < 0) {
+        cout << "Your input must be between 0 and 27" << endl;
+        continue;
+      }
+      cout << "Minutes: ";
+      cin >> sMinutes;
+      try {
+        dMinutes = stod(sMinutes);
+      } catch (...) {
+        cout << "---- <Enter a number dumbo> ----" << endl;
+        continue;
+      }
+      validInput = true;
+      Activity::Activity_Code activity =
+          static_cast<Activity::Activity_Code>(iActivityInput);
+
+      guy.getItem().addActivity(activity, dMinutes);
+    } while (!validInput);
+    cout << "Added " << guy.getItem().getFirstName() << " "
+         << guy.getItem().getLastName() << ", "
+         << "blah" << ", "
+         << dMinutes << " = "
+         << guy.getItem().getLastActivity().getInMiles(
+                guy.getItem().getHeight())
+         << endl;
+    auto thingy = guy.getItem().getLastActivity();
+    cout << endl << thingy.getActivityName() << endl;
   }
 }
 

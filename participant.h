@@ -35,9 +35,15 @@ public:
     participantActivities[maxIndex + 1] = temp;
     maxIndex++;
   }
-  Activity getActivity(const int index) {
+  Activity getActivity(const int index) const {
     if (index < 365)
       return participantActivities[index];
+    else
+      return Activity();
+  }
+  Activity getLastActivity() const {
+    if (maxIndex >= 0)
+      return participantActivities[maxIndex];
     else
       return Activity();
   }
@@ -85,7 +91,7 @@ public:
   bool operator!=(const Participant &part) const {
     return (this->getKey() == part.getKey());
   }
-  void calculateMilesWalked() {
+  void calculateTotalMilesWalked() {
     int i;
     double miles;
     for (i = 0; i < maxIndex; i++) {

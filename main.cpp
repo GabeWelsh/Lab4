@@ -52,7 +52,7 @@ void convertTextToBinary(const std::string &inputFileName,
       participant.addActivity(
           static_cast<Activity::Activity_Code>(activityCode), minutes);
     }
-    participant.calculateMilesWalked();
+    participant.calculateTotalMilesWalked();
     // Write Participant object to binary file
     outputFile.write(reinterpret_cast<const char *>(&participant),
                      sizeof(Participant));
@@ -67,7 +67,7 @@ int main() {
   ifstream inFile("input.bin", ios::binary);
   BinarySearchTree<Participant> tree;
   tree.readFromBinaryFile(inFile);
-
+  inFile.close();
   string sInput;
   do {
     cout << "----- Choose an option below -----\n";
@@ -95,6 +95,7 @@ int main() {
       addParticipant(tree);
       break;
     case 3:
+      addActivity(tree);
       break;
     case 4:
       break;
@@ -106,6 +107,5 @@ int main() {
     }
   } while (sInput != "6");
 
-  inFile.close();
   return 0;
 }
