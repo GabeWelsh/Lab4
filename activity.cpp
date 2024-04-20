@@ -33,9 +33,6 @@ const int Activity::STEPS_IN_1_MIN[Activity_Code::Yoga + 1] = {
     85,  152, 136, 242, 121, 242, 61,  167, 242, 182, 91,  99,  91,  212,
     212, 303, 348, 409, 70,  212, 152, 273, 212, 212, 100, 152, 121, 76};
 
-double Activity::getInMiles(float stepLength) {
-  float steps = (float)getStepsInOneMinute() * minutesDone;
-  double feetWalked = (stepLength * steps) / 12;
-  double milesWalked = feetWalked / 5280;
-  return milesWalked;
+double Activity::getInMiles(float height) const {
+  return ((0.413 * height)/12);
 }

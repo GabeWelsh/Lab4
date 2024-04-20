@@ -45,7 +45,7 @@ public:
   void setMinutesDone(double min) { minutesDone = min; }
   string getActivityName() const { return ACTIVITY_NAMES[activity]; }
   int getStepsInOneMinute() const { return STEPS_IN_1_MIN[activity]; }
-  double getInMiles(float height);
+  double getInMiles(float height) const;
 
 private:
   const static string ACTIVITY_NAMES[Activity_Code::Yoga + 1];
@@ -53,5 +53,5 @@ private:
   double minutesDone;
   Activity::Activity_Code activity;
 };
-
+  
 #endif

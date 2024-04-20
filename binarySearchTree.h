@@ -8,6 +8,7 @@
 #include "node.h"
 #include "position.h"
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <ostream>
 
@@ -44,6 +45,8 @@ public:
   virtual ~BinarySearchTree() { deleteUtility(superRootPtr); }
   friend class Position<T>;
   Node<T> *copyTree(Node<T> *, Node<T> *);
+  void readFromBinaryFile(ifstream &inFile);
+  void writeToBinaryFile(ofstream &outFile) const;
 
 private:
   Node<T> *superRootPtr;
@@ -53,6 +56,9 @@ private:
   void preorderTraverseAndPrint(const Position<T> &) const;  // one of these idk
   void inorderTraverseAndPrint(const Position<T> &) const;   // one of these idk
   void postorderTraverseAndPrint(const Position<T> &) const; // one of these idk
+
+  void inorderTraverseAndWrite(ofstream &outFile, const Position<T> &p) const;
+
   // finds item in tree starting at position
   Position<T> findUtility(const T &item,
                           const Position<T> &) const; // askudhgaoskeghs
@@ -67,6 +73,38 @@ private:
   // remove node above fake leaf node at position p
   Position<T> removeAboveExternal(const Position<T> &p);
 };
+
+template <class T>
+void BinarySearchTree<T>::readFromBinaryFile(ifstream &inFile) {
+  if (!inFile.is_open()) {
+    cerr << "Error: Unable to open file for reading." << endl;
+    return;
+  }
+
+  T item;
+  while (inFile.read(reinterpret_cast<char *>(&item), sizeof(item))) {
+    insert(item); // Insert each item read from the file into the tree
+  }
+}
+
+template <class T>
+void BinarySearchTree<T>::writeToBinaryFile(ofstream &outFile) const {
+  if (!outFile.is_open()) {
+    cerr << "Error: Unable to open file for writing." << endl;
+    return;
+  }
+  inorderTraverseAndWrite(outFile, root());
+}
+
+template <class T>
+void BinarySearchTree<T>::inorderTraverseAndWrite(ofstream &outFile,
+                                                  const Position<T> &p) const {
+  if (p.isInternal()) {
+    p.nodePtr->item.writeToBinaryFile();
+    inorderTraverseAndWrite(outFile, p.left());
+    inorderTraverseAndWrite(outFile, p.right());
+  }
+}
 
 template <class T>
 Position<T> BinarySearchTree<T>::removeAboveExternal(const Position<T> &p) {
