@@ -123,20 +123,17 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
         continue;
       }
       validInput = true;
-      Activity::Activity_Code activity =
+      Activity::Activity_Code activityCode =
           static_cast<Activity::Activity_Code>(iActivityInput);
-
-      guy.getItem().addActivity(activity, dMinutes);
+      Activity activity(dMinutes, activityCode);
+      tree.addActivityToPosition(guy, activity);
     } while (!validInput);
-    cout << "Added " << guy.getItem().getFirstName() << " "
-         << guy.getItem().getLastName() << ", "
-         << "blah" << ", "
-         << dMinutes << " = "
+    cout << guy.getItem().getFirstName() << " " << guy.getItem().getLastName()
+         << ", " << guy.getItem().getLastActivity().getActivityName() << ", "
+         << guy.getItem().getLastActivity().getMinutes() << " = "
          << guy.getItem().getLastActivity().getInMiles(
                 guy.getItem().getHeight())
          << endl;
-    auto thingy = guy.getItem().getLastActivity();
-    cout << endl << thingy.getActivityName() << endl;
   }
 }
 

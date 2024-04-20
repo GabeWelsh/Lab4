@@ -5,7 +5,9 @@
 #ifndef BINARYSEARCHTREE_H
 #define BINARYSEARCHTREE_H
 
+#include "activity.h"
 #include "node.h"
+#include "participant.h"
 #include "position.h"
 #include <algorithm>
 #include <fstream>
@@ -47,6 +49,7 @@ public:
   friend class Position<T>;
   Node<T> *copyTree(Node<T> *, Node<T> *);
   void readFromBinaryFile(ifstream &inFile);
+  void addActivityToPosition(Position<Participant> &p, Activity &a);
   void writeToBinaryFile(ofstream &outFile) const;
 
 private:
@@ -75,6 +78,15 @@ private:
   // remove node above fake leaf node at position p
   Position<T> removeAboveExternal(const Position<T> &p);
 };
+
+template<>
+inline void BinarySearchTree<Participant>::addActivityToPosition(Position<Participant> &p, Activity &a) {
+  if (p.isExternal()) {
+    return;
+  }
+  p.nodePtr->item.addActivity(a.getActivity(), a.getMinutes());
+}
+
 
 template <class T>
 void BinarySearchTree<T>::readFromBinaryFile(ifstream &inFile) {

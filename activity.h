@@ -41,7 +41,12 @@ public:
       : minutesDone(0.0), activity(Activity::Activity_Code::Assembly_Line){};
   Activity(double minsDone, Activity::Activity_Code activityCode)
       : minutesDone(minsDone), activity(activityCode) {}
-
+  Activity::Activity_Code getActivity() {
+    return activity;
+  }
+  double getMinutes() {
+    return minutesDone;
+  }
   void setMinutesDone(double min) { minutesDone = min; }
   string getActivityName() const { return ACTIVITY_NAMES[static_cast<int>(activity)]; }
   int getStepsInOneMinute() const { return STEPS_IN_1_MIN[static_cast<int>(activity)]; }
