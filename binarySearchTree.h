@@ -120,7 +120,6 @@ inline void BinarySearchTree<Participant>::writeToBinaryFile(ofstream &outFile) 
 template <class T>
 void BinarySearchTree<T>::readFromBinaryFile(ifstream &inFile) {
   if (!inFile.is_open()) {
-    cerr << "Error: Unable to open file for reading." << endl;
     return;
   }
 

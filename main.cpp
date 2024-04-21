@@ -101,7 +101,10 @@ int main() {
       printTotalMilesWalked(tree);
       break;
     case 5:
-      tree.traverseAndPrint(tree.root(), PREORDER);
+      if (!tree.empty())
+        tree.traverseAndPrint(tree.root(), PREORDER);
+      else
+        cout << "--- The Binary Tree is empty. Please add a participant. ---" << endl;
       break;
     case 6:
       ofstream outFile("input.bin", ios::binary);
@@ -110,5 +113,7 @@ int main() {
       break;
     }
   } while (sInput != "6");
+  cout << "----- See ya next time -----" << endl;
+  
   return 0;
 }

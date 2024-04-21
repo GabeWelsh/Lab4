@@ -17,6 +17,10 @@
 using namespace std;
 
 inline void removeParticipant(BinarySearchTree<Participant> &tree) {
+  if (tree.empty()) {
+    cout << "--- Tree is empty. Please add a participant. ---" << endl;
+    return;
+  }
   string firstName, lastName;
   cout << "Last Name: ";
   cin >> lastName;
@@ -61,7 +65,7 @@ inline void addParticipant(BinarySearchTree<Participant> &tree) {
   transform(key.begin(), key.end(), key.begin(), ::tolower);
 
   Position<Participant> thing = tree.findParticipant(key);
-  if (thing.isExternal()) {
+  if (thing.isInternal() || tree.empty()) {
     float height;
     cout << "Height in inches: ";
     cin >> height;
@@ -81,6 +85,10 @@ inline void addParticipant(BinarySearchTree<Participant> &tree) {
 }
 
 inline void addActivity(BinarySearchTree<Participant> &tree) {
+  if (tree.empty()) {
+    cout << "--- The tree is empty. Please add a participant. ---" << endl;
+    return;
+  }
   string firstName, lastName;
   cout << "Last Name: ";
   cin >> lastName;
@@ -140,7 +148,11 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
 }
 
 inline void printTotalMilesWalked(BinarySearchTree<Participant> &tree) {
-  cout << tree.getTotalMilesFromActivities() << " miles walked." << endl;
+  if (tree.empty()) {
+    cout << "0 miles walked (The Binary Tree is empty)" << endl;
+  } else {
+    cout << tree.getTotalMilesFromActivities() << " miles walked." << endl;
+  }
 }
 
 inline void exitAndSave(BinarySearchTree<Participant> &tree,
