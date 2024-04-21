@@ -33,8 +33,8 @@ public:
   void addActivity(const Activity::Activity_Code code, const double minutes) {
     Activity temp(minutes, code);
     participantActivities[maxIndex + 1] = temp;
-    calculateTotalMilesWalked();
     maxIndex++;
+    calculateTotalMilesWalked();
   }
   Activity getActivity(const int index) const {
     if (index < 365)
@@ -56,13 +56,7 @@ public:
   }
 
   void writeToBinaryFile(ofstream &outFile) const {
-    outFile.write(firstName, sizeof(firstName));
-    outFile.write(lastName, sizeof(lastName));
-    outFile.write(reinterpret_cast<const char *>(&milesWalked),
-                  sizeof(milesWalked));
-    outFile.write(reinterpret_cast<const char *>(&height), sizeof(height));
-    outFile.write(reinterpret_cast<const char *>(&maxIndex), sizeof(maxIndex));
-    outFile.write(reinterpret_cast<const char *>(&height), sizeof(height));
+    outFile.write(reinterpret_cast<const char *>(this), sizeof(*this));
   }
 
   void readFromBinaryFile(ifstream &inFile) {
@@ -93,9 +87,13 @@ public:
     return (this->getKey() == part.getKey());
   }
   void calculateTotalMilesWalked() {
+    if (maxIndex < 0) {
+      milesWalked = 0;
+      return;
+    }
     int i;
-    double miles;
-    for (i = 0; i < maxIndex; i++) {
+    double miles = 0;
+    for (i = 0; i <= maxIndex; i++) {
       miles += participantActivities[i].getInMiles(height);
     }
     milesWalked = miles;
@@ -103,7 +101,7 @@ public:
 
   friend std::ostream &operator<<(std::ostream &os,
                                   const Participant &participant) {
-    os << participant.getKey()
+    os << participant.firstName << " " << participant.lastName
        << " " << participant.getMilesWalked();
     return os;
   }

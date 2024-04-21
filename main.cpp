@@ -64,6 +64,7 @@ void convertTextToBinary(const std::string &inputFileName,
 }
 
 int main() {
+  // convertTextToBinary("input.txt", "input.bin");
   ifstream inFile("input.bin", ios::binary);
   BinarySearchTree<Participant> tree;
   tree.readFromBinaryFile(inFile);
@@ -75,7 +76,7 @@ int main() {
          << "  2: Add participant\n"
          << "  3: Add activity\n"
          << "  4: Calculate total miles walked\n"
-         << "  5: Pre-order print\n"
+         << "  5: Pre-Order print\n"
          << "  6: Exit and save\n";
     cout << "Option> ";
     cin >> sInput;
@@ -83,7 +84,6 @@ int main() {
     try {
       iInput = stoi(sInput);
     } catch (...) {
-      cout << "----- <Enter a number dumbo> -----\n";
       continue;
     }
 
@@ -104,9 +104,11 @@ int main() {
       tree.traverseAndPrint(tree.root(), PREORDER);
       break;
     case 6:
+      ofstream outFile("input.bin", ios::binary);
+      exitAndSave(tree, outFile);
+      outFile.close();
       break;
     }
   } while (sInput != "6");
-
   return 0;
 }

@@ -1,7 +1,7 @@
 all: program
 
 program:
-	@g++ *.cpp -I . -o exe
+	@g++ *.cpp -I . -o exe -O2
 	@rm -rf *.o
 run: program
 	@./exe

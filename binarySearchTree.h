@@ -62,7 +62,7 @@ private:
   void inorderTraverseAndPrint(const Position<T> &) const;   // one of these idk
   void postorderTraverseAndPrint(const Position<T> &) const; // one of these idk
 
-  void inorderTraverseAndWrite(ofstream &outFile, const Position<T> &p) const;
+  void inorderTraverseAndWrite(ofstream &outFile, const Position<Participant> &p) const;
 
   // finds item in tree starting at position
   Position<T> findUtility(const T &item,
@@ -98,7 +98,24 @@ inline void BinarySearchTree<Participant>::addActivityToPosition(Position<Partic
   }
   p.nodePtr->item.addActivity(a.getActivity(), a.getMinutes());
 }
+template <>
+inline void BinarySearchTree<Participant>::inorderTraverseAndWrite(ofstream &outFile,
+                                                             const Position<Participant> &p) const {
+  if (p.isInternal()) {
+    p.nodePtr->item.writeToBinaryFile(outFile);
+    inorderTraverseAndWrite(outFile, p.left());
+    inorderTraverseAndWrite(outFile, p.right());
+  }
+}
 
+template <>
+inline void BinarySearchTree<Participant>::writeToBinaryFile(ofstream &outFile) const {
+  if (!outFile.is_open()) {
+    cerr << "Error: Unable to open file for writing." << endl;
+    return;
+  }
+  inorderTraverseAndWrite(outFile, root());
+}
 
 template <class T>
 void BinarySearchTree<T>::readFromBinaryFile(ifstream &inFile) {
@@ -110,25 +127,6 @@ void BinarySearchTree<T>::readFromBinaryFile(ifstream &inFile) {
   T item;
   while (inFile.read(reinterpret_cast<char *>(&item), sizeof(item))) {
     insert(item); // Insert each item read from the file into the tree
-  }
-}
-
-template <class T>
-void BinarySearchTree<T>::writeToBinaryFile(ofstream &outFile) const {
-  if (!outFile.is_open()) {
-    cerr << "Error: Unable to open file for writing." << endl;
-    return;
-  }
-  inorderTraverseAndWrite(outFile, root());
-}
-
-template <class T>
-void BinarySearchTree<T>::inorderTraverseAndWrite(ofstream &outFile,
-                                                  const Position<T> &p) const {
-  if (p.isInternal()) {
-    p.nodePtr->item.writeToBinaryFile();
-    inorderTraverseAndWrite(outFile, p.left());
-    inorderTraverseAndWrite(outFile, p.right());
   }
 }
 

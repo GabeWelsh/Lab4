@@ -75,7 +75,8 @@ inline void addParticipant(BinarySearchTree<Participant> &tree) {
          << " has been added." << endl;
   } else {
     cout << thing.getItem().getFirstName() << " "
-         << thing.getItem().getLastName() << " is already a participant";
+         << thing.getItem().getLastName() << " is already a participant"
+         << endl;
   }
 }
 
@@ -139,8 +140,12 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
 }
 
 inline void printTotalMilesWalked(BinarySearchTree<Participant> &tree) {
-  cout << tree.getTotalMilesFromActivities() << endl;
+  cout << tree.getTotalMilesFromActivities() << " miles walked." << endl;
 }
 
+inline void exitAndSave(BinarySearchTree<Participant> &tree,
+                        ofstream &outFile) {
+  tree.writeToBinaryFile(outFile);
+}
 
 #endif
