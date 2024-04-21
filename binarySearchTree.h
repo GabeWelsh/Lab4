@@ -28,15 +28,15 @@ public:
   BinarySearchTree();
   BinarySearchTree(const BinarySearchTree &);
   // returns num nodes in tree
-  int size() const { return numNodes; } // asdfasdfhasdjkfasdgoa
+  int size() const { return numNodes; }
   // returns true if tree empty of real nodes
-  bool empty() const { return numNodes == 0; } // aksdhfoiauwebsidbvoisd
+  bool empty() const { return numNodes == 0; }
   // superroot right pointer always points to real root node
   Position<T> root() const { return Position<T>(superRootPtr->rightPtr); }
   void traverseAndPrint(const Position<T> &p, int type) const;
   int depth(const Position<T> &) const;
   int height(const Position<T> &) const;
-  Position<T> begin() const; // asgiphsgsoifnawegas
+  Position<T> begin() const;
   // returns NULL iterator
   Position<T> end() const { return Position<T>(); }
   Position<T> find(const T &) const;
@@ -48,9 +48,21 @@ public:
   virtual ~BinarySearchTree() { deleteUtility(superRootPtr); }
   friend class Position<T>;
   Node<T> *copyTree(Node<T> *, Node<T> *);
+
+  // reads the entire `ifstream` into itself
   void readFromBinaryFile(ifstream &inFile);
+
+  // the type parameter must be `Participant`
+  // adds the given `Activity` to the given position
   void addActivityToPosition(Position<Participant> &p, Activity &a);
+
+  // the type parameter must be `Participant`
+  // iterates through the list and adds up all miles
+  // Returns: total miles walked from all participants
   double getTotalMilesFromActivities() const;
+
+  // the type parameter must be `Participant`
+  // writes entire tree to supplied `ofstream` with a pre-ordered traversal
   void writeToBinaryFile(ofstream &outFile) const;
 
 private:
@@ -62,12 +74,16 @@ private:
   void inorderTraverseAndPrint(const Position<T> &) const;   // one of these idk
   void postorderTraverseAndPrint(const Position<T> &) const; // one of these idk
 
-  void inorderTraverseAndWrite(ofstream &outFile, const Position<Participant> &p) const;
+  // type parameter must be `Participant`
+  // pre-ordered traversal that writes to supplied `ofstream`
+  void preOrderTraverseAndWrite(ofstream &outFile,
+                                const Position<Participant> &p) const;
 
   // finds item in tree starting at position
   Position<T> findUtility(const T &item,
                           const Position<T> &) const; // askudhgaoskeghs
-  Position<T> findParticipantUtility(const string &key, const Position<T> &) const;
+  Position<T> findParticipantUtility(const string &key,
+                                     const Position<T> &) const;
   // inserts item into tree
   Position<T> insertUtility(const T &item);
   // deletes all nodes in the tree
@@ -80,8 +96,12 @@ private:
   Position<T> removeAboveExternal(const Position<T> &p);
 };
 
-template<>
-inline double BinarySearchTree<Participant>::getTotalMilesFromActivities() const {
+// the type parameter must be `Participant`
+// iterates through the list and adds up all miles
+// Returns: total miles walked from all participants
+template <>
+inline double
+BinarySearchTree<Participant>::getTotalMilesFromActivities() const {
   Position<Participant> pos = begin();
   double totalMiles = 0;
   do {
@@ -91,32 +111,42 @@ inline double BinarySearchTree<Participant>::getTotalMilesFromActivities() const
   return totalMiles;
 }
 
-template<>
-inline void BinarySearchTree<Participant>::addActivityToPosition(Position<Participant> &p, Activity &a) {
+// the type parameter must be `Participant`
+// adds the given `Activity` to the given position
+template <>
+inline void
+BinarySearchTree<Participant>::addActivityToPosition(Position<Participant> &p,
+                                                     Activity &a) {
   if (p.isExternal()) {
     return;
   }
   p.nodePtr->item.addActivity(a.getActivity(), a.getMinutes());
 }
+// type parameter must be `Participant`
+// pre-ordered traversal that writes to supplied `ofstream`
 template <>
-inline void BinarySearchTree<Participant>::inorderTraverseAndWrite(ofstream &outFile,
-                                                             const Position<Participant> &p) const {
+inline void BinarySearchTree<Participant>::preOrderTraverseAndWrite(
+    ofstream &outFile, const Position<Participant> &p) const {
   if (p.isInternal()) {
     p.nodePtr->item.writeToBinaryFile(outFile);
-    inorderTraverseAndWrite(outFile, p.left());
-    inorderTraverseAndWrite(outFile, p.right());
+    preOrderTraverseAndWrite(outFile, p.left());
+    preOrderTraverseAndWrite(outFile, p.right());
   }
 }
 
+// the type parameter must be `Participant`
+// writes entire tree to supplied `ofstream` with a pre-ordered traversal
 template <>
-inline void BinarySearchTree<Participant>::writeToBinaryFile(ofstream &outFile) const {
+inline void
+BinarySearchTree<Participant>::writeToBinaryFile(ofstream &outFile) const {
   if (!outFile.is_open()) {
     cerr << "Error: Unable to open file for writing." << endl;
     return;
   }
-  inorderTraverseAndWrite(outFile, root());
+  preOrderTraverseAndWrite(outFile, root());
 }
 
+// reads the entire `ifstream` into itself
 template <class T>
 void BinarySearchTree<T>::readFromBinaryFile(ifstream &inFile) {
   if (!inFile.is_open()) {
@@ -338,7 +368,8 @@ template <class T> Position<T> BinarySearchTree<T>::find(const T &item) const {
  * Returns iterator to object, superroot iterator if tree
  * is empty, fake leaf postion if not found
  */
-template <class T> Position<T> BinarySearchTree<T>::findParticipant(const string &key) const {
+template <class T>
+Position<T> BinarySearchTree<T>::findParticipant(const string &key) const {
   if (numNodes > 0) {
     Position<T> v = findParticipantUtility(key, root());
     return v;
@@ -399,8 +430,9 @@ Position<T> BinarySearchTree<T>::findUtility(const T &item,
 // operator<, tree not empty of real nodes
 // Returns position iterator where found or NULL iterator
 template <class T>
-Position<T> BinarySearchTree<T>::findParticipantUtility(const string &key,
-                                             const Position<T> &pos) const {
+Position<T>
+BinarySearchTree<T>::findParticipantUtility(const string &key,
+                                            const Position<T> &pos) const {
   if (pos.isExternal()) {
     return pos;
   } else if (pos.nodePtr->item.getKey() == key.c_str()) { // found

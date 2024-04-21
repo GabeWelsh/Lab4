@@ -9,13 +9,17 @@
 #include "node.h"
 #include "participant.h"
 
+#include <algorithm>
 #include <bits/stdc++.h>
+#include <cctype>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
 using namespace std;
 
+// Returns nothing
+// Purpose: ask user input to remove a participant from the Binary Tree
 inline void removeParticipant(BinarySearchTree<Participant> &tree) {
   if (tree.empty()) {
     cout << "--- Tree is empty. Please add a participant. ---" << endl;
@@ -29,11 +33,12 @@ inline void removeParticipant(BinarySearchTree<Participant> &tree) {
 
   string key = lastName;
   key += firstName;
+  // convert sring from: rANdOm -> random
   transform(key.begin(), key.end(), key.begin(), ::tolower);
 
   Position<Participant> thing = tree.findParticipant(key);
   if (thing.isExternal()) {
-    cout << "Participant not found" << endl;
+    cout << "--- Participant not found ---" << endl;
   } else {
     thing.getItem().printStats();
     tree.erase(thing);
@@ -41,17 +46,16 @@ inline void removeParticipant(BinarySearchTree<Participant> &tree) {
   }
 }
 
-inline string fixString(const std::string &input) {
-  string result = input;
-  if (!result.empty()) {
+// Directly changes supplied string: `input`
+// Sets first character to uppercase and the rest to lower.
+// ex: "rAnDOM" -> "Random"
+inline void fixString(std::string &input) {
+  if (!input.empty()) {
+    // Convert all characters to lowercase
+    transform(input.begin(), input.end(), input.begin(), ::tolower);
     // Capitalize the first character
-    result[0] = toupper(result[0]);
-    // Convert the rest of the characters to lowercase
-    for (size_t i = 1; i < result.length(); ++i) {
-      result[i] = std::tolower(result[i]);
-    }
+    input[0] = toupper(input[0]);
   }
-  return result;
 }
 
 inline void addParticipant(BinarySearchTree<Participant> &tree) {
@@ -62,15 +66,16 @@ inline void addParticipant(BinarySearchTree<Participant> &tree) {
   cin >> firstName;
   string key = lastName;
   key += firstName;
+  // make sure the key is all lowercase
   transform(key.begin(), key.end(), key.begin(), ::tolower);
 
   Position<Participant> thing = tree.findParticipant(key);
-  if (thing.isInternal() || tree.empty()) {
+  if (thing.isExternal() || tree.empty()) {
     float height;
     cout << "Height in inches: ";
     cin >> height;
-    firstName = fixString(firstName);
-    lastName = fixString(lastName);
+    fixString(firstName);
+    fixString(lastName);
 
     Participant someGuy(height, firstName.c_str(), lastName.c_str());
     tree.insert(someGuy);
@@ -99,17 +104,18 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
   key += firstName;
   transform(key.begin(), key.end(), key.begin(), ::tolower);
 
-  firstName = fixString(firstName);
-  lastName = fixString(lastName);
+  fixString(firstName);
+  fixString(lastName);
 
   Position<Participant> guy = tree.findParticipant(key);
   if (guy.isExternal()) {
     cout << "Participant not found." << endl;
   } else {
-    bool validInput = false;
+    bool validInput = false; // flag for user-input
     string sActivityInput, sMinutes;
     int iActivityInput;
     double dMinutes;
+    // do-while loop is in case of errors in user input
     do {
       cout << "Activity code: ";
       cin >> sActivityInput;
@@ -121,7 +127,7 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
       }
       if (iActivityInput > Activity::Activity_Code::Yoga ||
           iActivityInput < 0) {
-        cout << "Your input must be between 0 and 27" << endl;
+        cout << "--- Your input must be between 0 and 27 ---" << endl;
         continue;
       }
       cout << "Minutes: ";
@@ -138,9 +144,11 @@ inline void addActivity(BinarySearchTree<Participant> &tree) {
       Activity activity(dMinutes, activityCode);
       tree.addActivityToPosition(guy, activity);
     } while (!validInput);
+    
+    // FirstName LastName, ActivityAdded, NumberOfMinutesAdded = NumberOfMilesAdded
     cout << guy.getItem().getFirstName() << " " << guy.getItem().getLastName()
          << ", " << guy.getItem().getLastActivity().getActivityName() << ", "
-         << guy.getItem().getLastActivity().getMinutes() << " = "
+         << guy.getItem().getLastActivity().getMinutes() << " minutes" << " = "
          << guy.getItem().getLastActivity().getInMiles(
                 guy.getItem().getHeight())
          << endl;
@@ -153,6 +161,14 @@ inline void printTotalMilesWalked(BinarySearchTree<Participant> &tree) {
   } else {
     cout << tree.getTotalMilesFromActivities() << " miles walked." << endl;
   }
+}
+
+inline void preOrderPrint(BinarySearchTree<Participant> &tree) {
+  if (!tree.empty())
+    tree.traverseAndPrint(tree.root(), PREORDER);
+  else
+    cout << "--- The Binary Tree is empty. Please add a participant. ---"
+         << endl;
 }
 
 inline void exitAndSave(BinarySearchTree<Participant> &tree,

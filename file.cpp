@@ -1,13 +1,5 @@
-/* FILE: main.cpp
- * PURPOSE: start point to the program + contains function used to create the
- *          binary input file
- */
 #include "activity.h"
-#include "binarySearchTree.h"
-#include "node.h"
 #include "participant.h"
-#include "position.h"
-#include "userFunctions.h"
 
 #include <fstream>
 #include <iostream>
@@ -67,53 +59,6 @@ void convertTextToBinary(const std::string &inputFileName,
 }
 
 int main() {
-  // convertTextToBinary("input.txt", "input.bin");
-  ifstream inFile("input.bin", ios::binary);
-  BinarySearchTree<Participant> tree;
-  tree.readFromBinaryFile(inFile);
-  inFile.close();
-  string sInput;
-  do {
-    cout << "----- Choose an option below -----\n"
-         << "  1: Remove participant\n"
-         << "  2: Add participant\n"
-         << "  3: Add activity\n"
-         << "  4: Calculate total miles walked\n"
-         << "  5: Pre-Order print\n"
-         << "  6: Exit and save\n"
-         << "Option> ";
-    cin >> sInput;
-    int iInput;
-    try {
-      iInput = stoi(sInput);
-    } catch (...) {
-      continue;
-    }
-
-    switch (iInput) {
-    case 1:
-      removeParticipant(tree);
-      break;
-    case 2:
-      addParticipant(tree);
-      break;
-    case 3:
-      addActivity(tree);
-      break;
-    case 4:
-      printTotalMilesWalked(tree);
-      break;
-    case 5:
-      preOrderPrint(tree);
-      break;
-    case 6:
-      ofstream outFile("input.bin", ios::binary);
-      exitAndSave(tree, outFile);
-      outFile.close();
-      break;
-    }
-  } while (sInput != "6");
-  cout << "----- See ya next time -----" << endl;
-
-  return 0;
+    convertTextToBinary("input.txt", "input.bin");
+    return 0;
 }

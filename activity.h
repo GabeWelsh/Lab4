@@ -7,6 +7,7 @@ using namespace std;
 
 class Activity {
 public:
+  // Each code for each activity stored in an enum
   enum Activity_Code {
     Assembly_Line,
     Baseball,
@@ -41,20 +42,29 @@ public:
       : minutesDone(0.0), activity(Activity::Activity_Code::Assembly_Line){};
   Activity(double minsDone, Activity::Activity_Code activityCode)
       : minutesDone(minsDone), activity(activityCode) {}
-  Activity::Activity_Code getActivity() {
-    return activity;
-  }
-  double getMinutes() {
-    return minutesDone;
-  }
+  // Returns `Activity_Code` of current `Activity` object
+  Activity::Activity_Code getActivity() { return activity; }
+  // Returns `minutesDone` of the Activity
+  double getMinutes() { return minutesDone; }
+  // set `minutesDone`
   void setMinutesDone(double min) { minutesDone = min; }
-  string getActivityName() const { return ACTIVITY_NAMES[static_cast<int>(activity)]; }
-  int getStepsInOneMinute() const { return STEPS_IN_1_MIN[static_cast<int>(activity)]; }
+  // returns a string of the activity's name.
+  string getActivityName() const {
+    return ACTIVITY_NAMES[static_cast<int>(activity)];
+  }
+  // returns the number of steps the activity yeilds per-minute
+  int getStepsInOneMinute() const {
+    return STEPS_IN_1_MIN[static_cast<int>(activity)];
+  }
+  // returns the total number of miles walked based on the activity,
+  // minutesDone, and supplied height
   double getInMiles(float height) const;
+  // add the name for the supplied activity to the provided ostream
   friend std::ostream &operator<<(std::ostream &os, Activity &activity) {
     os << ACTIVITY_NAMES[activity.activity];
     return os;
   }
+
 private:
   const static string ACTIVITY_NAMES[Activity_Code::Yoga + 1];
   const static int STEPS_IN_1_MIN[Activity_Code::Yoga + 1];
