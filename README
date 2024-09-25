@@ -1,10 +1,1 @@
-What else could we add to our application? 
-List at least two functionalities that you would want to add to this lab. 
-For each one, list why it would be useful.
 
-We could add functionality to print the tree in a graph form rather than going over it with a pre-order traversal.
-This would be useful for the user to more clearly see what the tree looks like without having to slowly look through 
-the pre-ordered list.
-
-Add a new option to print a specific participant's stats.
-This would be useful if you would want to find out exactly what someone has done.
